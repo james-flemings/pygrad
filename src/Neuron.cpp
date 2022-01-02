@@ -25,14 +25,12 @@ double Neuron::getOutput(std::vector<double> inputs){
     Calculate output of a neuron given the inputs with corresponding weights (and bias)
     */
     double output = 0.0;
-    double sum = this->weights[0]; // w_0 = bias
     if (!this->activationFunction.compare("Sigmoid")){
-        for (int i = 0; i < this->size; i++)
-            sum += this->weights[i+1] * inputs[i];
-        output =  1 / (1 + exp(-sum));
+        double product = std::inner_product(this->weights.begin()+1, this->weights.end(), inputs.begin(), this->weights[0]);
+        output =  1 / (1 + exp(-product));
     }
     else {
-        throw std::domain_error("Get output using invalid activation function. This should not occur.");
+        throw std::domain_error("Invalid activation function in get output. This should not occur.");
     }
     return output;
 }

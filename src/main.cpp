@@ -6,7 +6,7 @@ int main(){
     std::string activationFunction = "Sigmoid";
     Neuron neuron = Neuron(5, activationFunction, generator, distribution);
 
-    std::vector<double> inputs = {1, 1, 1, 1, 1};
+    std::vector<double> inputs = {1, 1, 1, 1};
     double output = neuron.getOutput(inputs);
 
     std::cout << "The ouput of the neuron is " << output << std::endl;;
