@@ -1,6 +1,6 @@
 #include "Neuron.h"
 
-Neuron::Neuron(int size, std::string actFunc,  
+Neuron::Neuron(int size, std::string activation,  
                 std::default_random_engine generator,
                 std::normal_distribution<double> distribution) {
     /*
@@ -11,9 +11,9 @@ Neuron::Neuron(int size, std::string actFunc,
     */
     // If user requests unimplemented activation function, throw exception
     // Might need to move this to Layers class once in development
-    if (actFunc.compare("Sigmoid"))
+    if (activation.compare("Sigmoid"))
             throw std::invalid_argument("Invalid activation function");
-    this->activationFunction = actFunc;
+    this->activation = activation;
     this->size = size;
     for (int i = 0; i < this->size; i++){
         this->weights.push_back(distribution(generator));
@@ -25,7 +25,7 @@ double Neuron::getOutput(std::vector<double> inputs){
     Calculate output of a neuron given the inputs with corresponding weights (and bias)
     */
     double output = 0.0;
-    if (!this->activationFunction.compare("Sigmoid")){
+    if (!this->activation.compare("Sigmoid")){
         double product = std::inner_product(this->weights.begin()+1, this->weights.end(), inputs.begin(), this->weights[0]);
         output =  1 / (1 + exp(-product));
     }

@@ -30,3 +30,6 @@ src.*.obj
 src/*.exe
 src/*.out
 src/*.app
+
+# Build from test
+build

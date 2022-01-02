@@ -12,15 +12,16 @@
 class Neuron
 {
     public:
+        Neuron();
         Neuron(int size, std::string actFunc,
                 std::default_random_engine generator,
                 std::normal_distribution<double> distribution);
         double getOutput(std::vector<double> inputs);
-
-    private:
-        int size;
-        std::string activationFunction; 
         std::vector<double> weights;
+
+    protected:
+        int size;
+        std::string activation; 
 };
 
 #endif
