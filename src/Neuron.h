@@ -12,7 +12,7 @@
 class Neuron
 {
     public:
-        Neuron(int size, std::string activationFunction, int seed,
+        Neuron(int size, std::string actFunc,
                 std::default_random_engine generator,
                 std::normal_distribution<double> distribution);
         double getOutput(std::vector<double> inputs);
