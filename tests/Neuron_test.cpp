@@ -26,7 +26,7 @@ protected:
 };
 
 TEST_F(NeuronTest, WeightsAssertions) {
-  EXPECT_EQ(n_->weights.size(), SIZE)
+  EXPECT_EQ(n_->weights.size(), SIZE + 1)
       << "Neuron did not create correct number of weights";
 
   std::vector<double> inputs = {1.0, 1.0};

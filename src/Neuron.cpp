@@ -7,7 +7,7 @@ Neuron::Neuron(int size, const std::string &activation,
   weights
   */
   this->activation = activation;
-  this->size = size;
+  this->size = size + 1;
   this->weights.resize(this->size);
   initializer(this->weights);
 }

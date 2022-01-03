@@ -1,8 +1,7 @@
 #include "Layer.h"
 
-Layer::Layer(int units, int inputSize = 0,
-             const std::string activation = std::string(),
-             const std::string initializer = std::string()) {
+Layer::Layer(int units, int inputSize, const std::string activation,
+             const std::string initialization) {
   /*
   Layer class is the general base class for specifc layers
   Default value for activation is Sigmoid.
@@ -15,24 +14,37 @@ Layer::Layer(int units, int inputSize = 0,
   */
   if (activation.empty())
     this->activation = "Sigmoid";
-  else if (initializer.compare("Sigmoid"))
+  else if (!activation.compare("Sigmoid"))
     this->activation = activation;
   else
     throw std::invalid_argument("Invalid activation function");
 
-  if (initializer.empty())
-    this->initializer = "Random";
-  else if (initializer.compare("Random"))
-    this->initializer = initializer;
+  if (initialization.empty())
+    this->initialization = "Random";
+  else if (!initialization.compare("Random"))
+    this->initialization = initialization;
   else
-    throw std::invalid_argument("Invalid initializer scheme");
+    throw std::invalid_argument("Invalid initialization scheme");
 
   this->units = units;
   this->inputSize = inputSize;
 }
 
-double Layer::initializeWeights(Initializer &initializer, int seed) {
+void Layer::initializeWeights(Initializer &initializer) {
+  auto fn = [&] {
+    if (!this->initialization.compare("Random"))
+      return std::bind(&Initializer::randomNormal, initializer,
+                       std::placeholders::_1);
+  }();
+
   for (int i = 0; i < this->units; i++)
-    this->neurons.push_back(
-        Neuron(this->inputSize, this->activation, initializer.randomNormal));
+    this->neurons.push_back(Neuron(this->inputSize, this->activation, fn));
+}
+
+int Layer::totalParameters() {
+  int total = 0;
+  for (auto &n : this->neurons) {
+    total += n.weights.size();
+  }
+  return total;
 }

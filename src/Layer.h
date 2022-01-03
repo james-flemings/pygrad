@@ -8,13 +8,15 @@ class Layer {
 public:
   Layer(int units, int inputSize = 0,
         const std::string activation = std::string(),
-        const std::string initializer = std::string());
-  virtual std::vector<double> getOutput(std::vector<double> inputs);
-  double initializeWeights(Initializer &initializer, int seed);
+        const std::string initialization = std::string());
+  virtual ~Layer(){};
+  // virtual std::vector<double> getOutput(std::vector<double> inputs);
+  void initializeWeights(Initializer &initializer);
+  int totalParameters();
 
 protected:
   int units, inputSize;
-  std::string activation, initializer;
+  std::string activation, initialization;
   std::vector<Neuron> neurons;
 };
 
