@@ -1,24 +1,15 @@
 #include "Neuron.h"
 
-Neuron::Neuron(int size, std::string activation,
-               std::default_random_engine generator,
-               std::normal_distribution<double> distribution) {
+Neuron::Neuron(int size, const std::string &activation,
+               std::function<void(std::vector<double>)> initializer) {
   /*
   Initilize Neuron by determining activation funciton and intializing the
   weights
-  TODO: Make initializer modular so we can use different inialization schemes
-  Right now weights (and bias) are initialized by randomly selecting a value
-  from a normal distribution
   */
-  // If user requests unimplemented activation function, throw exception
-  // Might need to move this to Layers class once in development
-  if (activation.compare("Sigmoid"))
-    throw std::invalid_argument("Invalid activation function");
   this->activation = activation;
   this->size = size;
-  for (int i = 0; i < this->size; i++) {
-    this->weights.push_back(distribution(generator));
-  }
+  this->weights.resize(this->size);
+  initializer(this->weights);
 }
 
 double Neuron::getOutput(std::vector<double> inputs) {

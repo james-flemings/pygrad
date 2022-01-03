@@ -2,6 +2,7 @@
 #define NEURON_H
 
 #include <cmath>
+#include <functional>
 #include <iostream>
 #include <numeric>
 #include <random>
@@ -11,9 +12,8 @@
 
 class Neuron {
 public:
-  Neuron();
-  Neuron(int size, std::string actFunc, std::default_random_engine generator,
-         std::normal_distribution<double> distribution);
+  Neuron(int size, const std::string &activation,
+         std::function<void(std::vector<double>)> initializer);
   double getOutput(std::vector<double> inputs);
   std::vector<double> weights;
 

@@ -1,3 +1,4 @@
+#include "Initializer.h"
 #include "Neuron.h"
 
 int main() {
@@ -5,7 +6,8 @@ int main() {
   std::normal_distribution<double> distribution(0.0, 1.0);
   std::string activationFunction = "Sigmoid";
   Neuron *neuron;
-  neuron = new Neuron(3, activationFunction, generator, distribution);
+  Initializer initializer;
+  neuron = new Neuron(3, activationFunction, initializer.randomNormal);
   neuron->weights[0] = 3.0;
   neuron->weights[0] = 1.0;
   neuron->weights[0] = 1.0;
@@ -14,5 +16,6 @@ int main() {
   double output = neuron->getOutput(inputs);
 
   std::cout << "The ouput of the neuron is " << output << std::endl;
+  delete neuron;
   return 0;
 }
