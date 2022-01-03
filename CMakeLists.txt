@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.14)
 project(pygrad)
 
 # GoogleTest requires at least C++11
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 
 include(FetchContent)
 FetchContent_Declare(
@@ -19,10 +19,11 @@ enable_testing()
 add_executable(
   Neuron_test
   tests/Neuron_test.cpp
-  #tests/Layer_test.cpp
+  tests/DenseLayer_test.cpp
   src/Neuron.cpp
   src/Initializer.cpp
   src/Layer.cpp
+  src/DenseLayer.cpp
 )
 target_link_libraries(
   Neuron_test

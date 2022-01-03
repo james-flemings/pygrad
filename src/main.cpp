@@ -1,6 +1,7 @@
-#include "Initializer.h"
-#include "Layer.h"
-#include "Neuron.h"
+#include "DenseLayer.h"
+//#include "Initializer.h"
+//#include "Layer.h"
+//#include "Neuron.h"
 
 int main() {
   std::default_random_engine generator(time(0));
@@ -21,9 +22,9 @@ int main() {
   std::cout << "The ouput of the neuron is " << output << std::endl;
   delete neuron;
 
-  Layer layer(3, 4, "Sigmoid", "Random");
-  layer.initializeWeights(initializer);
-  std::cout << layer.totalParameters() << std::endl;
-
+  Layer *layer = new DenseLayer(3, 4, "Sigmoid", "Random");
+  layer->initializeWeights(initializer);
+  std::cout << layer->totalParameters() << std::endl;
+  delete layer;
   return 0;
 }
