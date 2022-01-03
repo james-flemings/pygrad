@@ -20,6 +20,7 @@ add_executable(
   Neuron_test
   tests/Neuron_test.cpp
   src/Neuron.cpp
+  src/Initializer.cpp
 )
 target_link_libraries(
   Neuron_test

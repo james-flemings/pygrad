@@ -7,7 +7,7 @@
 
 class Initializer {
 public:
-  Initializer(int seed = -1);
+  Initializer(int seed);
   void randomNormal(std::vector<double> weights);
 
 protected:
