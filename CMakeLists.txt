@@ -19,7 +19,7 @@ enable_testing()
 add_executable(
   Neuron_test
   tests/Neuron_test.cpp
-  tests/Layer_test.cpp
+  #tests/Layer_test.cpp
   src/Neuron.cpp
   src/Initializer.cpp
   src/Layer.cpp

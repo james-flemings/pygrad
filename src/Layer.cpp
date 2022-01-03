@@ -1,10 +1,11 @@
 #include "Layer.h"
 
-Layer::Layer(int units, int inputSize, const std::string activation,
-             const std::string initialization) {
+template <typename T>
+Layer<T>::Layer(int units, int inputSize, const std::string activation,
+                const std::string initialization) {
   /*
   Layer class is the general base class for specifc layers
-  Default value for activation is Sigmoid.
+  Default activation function is None.
 
   If user requests unimplemented activation function or initializer, throw
   exception.
@@ -13,7 +14,7 @@ Layer::Layer(int units, int inputSize, const std::string activation,
   from a normal distribution (Random)
   */
   if (activation.empty())
-    this->activation = "Sigmoid";
+    this->activation = "None";
   else if (!activation.compare("Sigmoid"))
     this->activation = activation;
   else
@@ -30,7 +31,8 @@ Layer::Layer(int units, int inputSize, const std::string activation,
   this->inputSize = inputSize;
 }
 
-void Layer::initializeWeights(Initializer &initializer) {
+template <typename T>
+void Layer<T>::initializeWeights(Initializer &initializer) {
   auto fn = [&] {
     if (!this->initialization.compare("Random"))
       return std::bind(&Initializer::randomNormal, initializer,
@@ -41,10 +43,9 @@ void Layer::initializeWeights(Initializer &initializer) {
     this->neurons.push_back(Neuron(this->inputSize, this->activation, fn));
 }
 
-int Layer::totalParameters() {
+template <typename T> int Layer<T>::totalParameters() {
   int total = 0;
-  for (auto &n : this->neurons) {
+  for (auto &n : this->neurons)
     total += n.weights.size();
-  }
   return total;
 }
