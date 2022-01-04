@@ -1,7 +1,7 @@
 #include "Neuron.h"
 
 Neuron::Neuron(int size, const std::string &activation,
-               std::function<void(std::vector<double>)> initializer) {
+               std::function<void(std::vector<double> &)> initializer) {
   /*
   Initilize Neuron by determining activation funciton and intializing the
   weights

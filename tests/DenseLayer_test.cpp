@@ -19,7 +19,18 @@ protected:
   DenseLayer *layer_;
 };
 
-TEST_F(DenseLayerTest, NeuronAssertions) {
+TEST_F(DenseLayerTest, ParametersAssertions) {
   EXPECT_EQ(layer_->totalParameters(), UNITS * (INPUTSIZE + 1))
       << "Layer does not contain correct number of parameters";
+}
+
+TEST_F(DenseLayerTest, OutputShapeAssertions) {
+  std::vector<double> input = {1.0, 2.0, 2.0, 3.0};
+  std::vector<double> output = layer_->getOutput(input);
+  EXPECT_EQ(output.size(), UNITS)
+      << "Layer output shape does not match number of units";
+  for (auto &o : output) {
+    EXPECT_LT(o, 1) << "Output larger than 1";
+    EXPECT_GT(o, 0) << "Output less than 0";
+  }
 }

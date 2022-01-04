@@ -43,7 +43,8 @@ void Layer::initializeWeights(Initializer &initializer) {
 
 int Layer::totalParameters() {
   int total = 0;
-  for (auto &n : this->neurons)
+  for (auto &n : this->neurons) {
     total += n.weights.size();
+  }
   return total;
 }

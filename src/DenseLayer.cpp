@@ -6,7 +6,8 @@ DenseLayer::DenseLayer(int units, int inputSize, const std::string activation,
 
 std::any DenseLayer::getOutputImpl(std::any inputs) {
   std::vector<double> output;
-  for (auto &n : this->neurons)
+  for (auto &n : this->neurons) {
     output.push_back(n.getOutput(std::any_cast<std::vector<double>>(inputs)));
+  }
   return output;
 }
