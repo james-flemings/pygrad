@@ -4,7 +4,7 @@ Layer::Layer(int units, int inputSize, const std::string activation,
              const std::string initialization) {
   /*
   Layer class is the general base class for specifc layers
-  Default value for activation is Sigmoid.
+  Default activation function is None.
 
   If user requests unimplemented activation function or initializer, throw
   exception.
@@ -13,7 +13,7 @@ Layer::Layer(int units, int inputSize, const std::string activation,
   from a normal distribution (Random)
   */
   if (activation.empty())
-    this->activation = "Sigmoid";
+    this->activation = "None";
   else if (!activation.compare("Sigmoid"))
     this->activation = activation;
   else

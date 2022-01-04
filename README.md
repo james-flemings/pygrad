@@ -11,7 +11,7 @@ sudo apt install cmake
 sudo apt install clang-format
 ```
 
-This project uses [GoogleTests](https://github.com/google/googletest) for unit testing. To run them, use the following commands:
+Mak sure to use c++ 17 standard. This project uses [GoogleTests](https://github.com/google/googletest) for unit testing. To run them, use the following commands:
 
 ```bash
 cmake -S . -B build

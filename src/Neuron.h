@@ -13,7 +13,7 @@
 class Neuron {
 public:
   Neuron(int size, const std::string &activation,
-         std::function<void(std::vector<double>)> initializer);
+         std::function<void(std::vector<double> &)> initializer);
   double getOutput(std::vector<double> inputs);
   std::vector<double> weights;
 
