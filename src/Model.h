@@ -3,12 +3,13 @@
 
 #include "DenseLayer.h"
 #include "Layer.h"
+#include <algorithm>
 #include <memory>
 
 class Model {
 public:
   Model();
-  Model(const std::vector<std::unique_ptr<Layer>> &layers);
+  Model(std::vector<std::unique_ptr<Layer>> &layers);
   int totalParameters();
 
 protected:
