@@ -26,6 +26,9 @@ Layer::Layer(int units, int inputSize, const std::string activation,
   else
     throw std::invalid_argument("Invalid initialization scheme");
 
+  if (units <= 0)
+    throw std::invalid_argument("Units for Layers must be positive");
+
   this->units = units;
   this->inputSize = inputSize;
 }
@@ -50,3 +53,7 @@ int Layer::totalParameters() {
 }
 
 int Layer::getUnits() { return this->units; }
+
+std::string Layer::getActivation() { return this->activation; }
+
+std::string Layer::getInitialization() { return this->initialization; }

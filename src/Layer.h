@@ -22,6 +22,8 @@ public:
   int totalParameters();
   int getUnits();
   int inputSize;
+  std::string getActivation();
+  std::string getInitialization();
 
 protected:
   virtual std::any getOutputImpl(std::any inputs) = 0;
