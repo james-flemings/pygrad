@@ -46,7 +46,8 @@ int main() {
   */
 
   std::vector<std::unique_ptr<Layer>> layers;
-  layers.push_back(std::make_unique<DenseLayer>(10, 10, "Sigmoid"));
+  layers.push_back(std::make_unique<DenseLayer>(20, 100, "Sigmoid"));
+  layers.push_back(std::make_unique<DenseLayer>(10, 0, "Sigmoid"));
   layers.push_back(std::make_unique<DenseLayer>(5, 0, "Sigmoid"));
   Model model(layers);
   model.printModel();

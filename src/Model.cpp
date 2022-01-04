@@ -13,7 +13,7 @@ Model::Model(std::vector<std::unique_ptr<Layer>> &layers) {
 
   for (auto &layer : this->layers) {
     layer->inputSize = layer->inputSize == 0 ? prevInputSize : layer->inputSize;
-    prevInputSize = layer->inputSize;
+    prevInputSize = layer->getUnits();
     layer->initializeWeights(initializer);
   }
 }
