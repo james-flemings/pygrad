@@ -10,6 +10,7 @@ https://stackoverflow.com/questions/7968023/c-virtual-template-method
 */
 class Layer {
 public:
+  Layer();
   Layer(int units, int inputSize = 0,
         const std::string activation = std::string(),
         const std::string initialization = std::string());
@@ -19,10 +20,12 @@ public:
   }
   void initializeWeights(Initializer &initializer);
   int totalParameters();
+  int inputSize;
 
 protected:
   virtual std::any getOutputImpl(std::any inputs) = 0;
-  int units, inputSize;
+  // virtual std::unique_ptr<Layer> cloneBase() = 0;
+  int units;
   std::string activation, initialization;
   std::vector<Neuron> neurons;
 };

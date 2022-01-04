@@ -1,4 +1,5 @@
 #include "DenseLayer.h"
+#include "Model.h"
 //#include "Initializer.h"
 //#include "Layer.h"
 //#include "Neuron.h"
@@ -42,6 +43,12 @@ int main() {
   for (auto &n : output)
     std::cout << n << " ";
   std::cout << std::endl;
+
+  std::vector<std::unique_ptr<Layer>> layers;
+  layers.push_back(std::make_unique<DenseLayer>(10, 10, "Sigmoid"));
+  layers.push_back(std::make_unique<DenseLayer>(10, 0, "Sigmoid"));
+  Model model(layers);
+  std::cout << model.totalParameters() << std::endl;
 
   delete layer;
   return 0;

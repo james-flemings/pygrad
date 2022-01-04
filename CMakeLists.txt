@@ -20,10 +20,12 @@ add_executable(
   Neuron_test
   tests/Neuron_test.cpp
   tests/DenseLayer_test.cpp
+  tests/Model_test.cpp
   src/Neuron.cpp
   src/Initializer.cpp
   src/Layer.cpp
   src/DenseLayer.cpp
+  src/Model.cpp
 )
 target_link_libraries(
   Neuron_test
