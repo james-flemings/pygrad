@@ -48,3 +48,5 @@ int Layer::totalParameters() {
   }
   return total;
 }
+
+int Layer::getUnits() { return this->units; }

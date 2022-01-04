@@ -24,3 +24,19 @@ int Model::totalParameters() {
     total += layer->totalParameters();
   return total;
 }
+
+void Model::printModel() {
+  std::string row = "---------------------------";
+  std::cout << "\nLayer \t Units \t Parameters \n";
+  std::cout << row << std::endl;
+  std::cout << "Input \t " << layers[0]->inputSize << " \t "
+            << "__ \n";
+  for (auto &layer : this->layers) {
+    std::cout << row << std::endl;
+    std::cout << "Dense \t " << layer->getUnits() << " \t "
+              << layer->totalParameters() << std::endl;
+    ;
+  }
+  std::cout << row << std::endl;
+  std::cout << "Total Prameters: " << this->totalParameters() << "\n\n";
+}

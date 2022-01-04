@@ -11,6 +11,7 @@ public:
   Model();
   Model(std::vector<std::unique_ptr<Layer>> &layers);
   int totalParameters();
+  void printModel();
 
 protected:
   std::vector<std::unique_ptr<Layer>> layers;

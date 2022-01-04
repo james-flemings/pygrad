@@ -20,11 +20,11 @@ public:
   }
   void initializeWeights(Initializer &initializer);
   int totalParameters();
+  int getUnits();
   int inputSize;
 
 protected:
   virtual std::any getOutputImpl(std::any inputs) = 0;
-  // virtual std::unique_ptr<Layer> cloneBase() = 0;
   int units;
   std::string activation, initialization;
   std::vector<Neuron> neurons;
