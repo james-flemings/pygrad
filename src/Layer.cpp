@@ -37,7 +37,7 @@ void Layer::initializeWeights(Initializer &initializer) {
   auto fn = [&] {
     if (!this->initialization.compare("Random"))
       return std::bind(&Initializer::randomNormal, initializer,
-                       std::placeholders::_1);
+                       std::placeholders::_1, std::placeholders::_2);
   }();
 
   for (int i = 0; i < this->units; i++)
@@ -47,7 +47,7 @@ void Layer::initializeWeights(Initializer &initializer) {
 int Layer::totalParameters() {
   int total = 0;
   for (auto &n : this->neurons) {
-    total += n.weights.size();
+    total += (n.weights.size() + 1);
   }
   return total;
 }
