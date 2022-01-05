@@ -30,6 +30,7 @@ src.*.obj
 src/*.exe
 src/*.out
 src/*.app
+src/pygrad
 
 # Build from test
 build

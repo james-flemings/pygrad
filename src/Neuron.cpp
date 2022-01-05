@@ -12,7 +12,7 @@ Neuron::Neuron(int size, const std::string &activation,
   initializer(this->weights, this->bias);
 }
 
-double Neuron::getOutput(VectorXd inputs) {
+double Neuron::getOutput(const VectorXd &inputs) const {
   /*
   Calculate output of a neuron given the inputs with corresponding weights (and
   bias)

@@ -20,3 +20,5 @@ cmake -S . -B build
 cmake --build build
 cd build && ctest
 ```
+
+When compiling the main program, make sure to have the flags `-O3` and `-fopenmp`.

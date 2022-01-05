@@ -44,7 +44,7 @@ void Layer::initializeWeights(Initializer &initializer) {
     this->neurons.push_back(Neuron(this->inputSize, this->activation, fn));
 }
 
-int Layer::totalParameters() {
+int Layer::totalParameters() const {
   int total = 0;
   for (auto &n : this->neurons) {
     total += (n.weights.size() + 1);
@@ -52,8 +52,8 @@ int Layer::totalParameters() {
   return total;
 }
 
-int Layer::getUnits() { return this->units; }
+int Layer::getUnits() const { return this->units; }
 
-std::string Layer::getActivation() { return this->activation; }
+std::string Layer::getActivation() const { return this->activation; }
 
-std::string Layer::getInitialization() { return this->initialization; }
+std::string Layer::getInitialization() const { return this->initialization; }

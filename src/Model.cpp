@@ -39,3 +39,6 @@ void Model::summary() {
   std::cout << row << std::endl;
   std::cout << "Total Prameters: " << this->totalParameters() << "\n\n";
 }
+
+// back_prop_type Model::backProp(const VectorXd &input, const VectorXd &label)
+// {}

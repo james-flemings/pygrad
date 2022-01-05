@@ -16,7 +16,7 @@ class Neuron {
 public:
   Neuron(int size, const std::string &activation,
          std::function<void(VectorXd &, double &)> initializer);
-  double getOutput(VectorXd inputs);
+  double getOutput(const VectorXd &inputs) const;
   VectorXd weights;
   double bias;
 
