@@ -6,8 +6,9 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
-    - name: Build tests
-      run: cmake -S . -B build && cmake --build build
-    - name: Run Test
-      run: cd build && ctest
+      - run: git submodule init
+      - uses: actions/checkout@v1
+      - name: Build tests
+        run: cmake -S . -B build && cmake --build build
+      - name: Run Test
+        run: cd build && ctest
