@@ -7,9 +7,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: srt32/git-actions@v0.0.3
         with:
-          args: git submodule update --init --recursive
+          submodules: "true"
+          token: ${{ secrets.PAT_TOKEN }}
       - name: Build tests
         run: cmake -S . -B build && cmake --build build
       - name: Run Test
