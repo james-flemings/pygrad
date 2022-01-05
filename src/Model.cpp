@@ -25,7 +25,7 @@ int Model::totalParameters() {
   return total;
 }
 
-void Model::printModel() {
+void Model::summary() {
   std::string row = "---------------------------";
   std::cout << "\nLayer \t Units \t Parameters \n";
   std::cout << row << std::endl;
@@ -35,7 +35,6 @@ void Model::printModel() {
     std::cout << row << std::endl;
     std::cout << "Dense \t " << layer->getUnits() << " \t "
               << layer->totalParameters() << std::endl;
-    ;
   }
   std::cout << row << std::endl;
   std::cout << "Total Prameters: " << this->totalParameters() << "\n\n";
