@@ -40,9 +40,8 @@ public:
                        double regularizer_term);
   back_prop_type backProp(const VectorXd &input, const VectorXd &label);
   double cost(const VectorXd &activations, const VectorXd &labels);
-  VectorXd delta(const VectorXd output, const VectorXd &activations,
+  VectorXd delta(const VectorXd sp, const VectorXd &activations,
                  const VectorXd &labels);
-  VectorXd sigmoid_prime(const VectorXd activation);
 
 protected:
   std::vector<std::unique_ptr<Layer>> layers;

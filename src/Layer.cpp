@@ -52,6 +52,15 @@ int Layer::totalParameters() const {
   return total;
 }
 
+VectorXd Layer::sigmoid(VectorXd &inputs) {
+  return 1 / (1 + (-1 * inputs.array()).exp());
+}
+
+VectorXd Layer::sigmoidPrime(VectorXd &activation) {
+  auto n = activation.size();
+  return activation.array() * (1 - activation.array());
+}
+
 int Layer::getUnits() const { return this->units; }
 
 std::string Layer::getActivation() const { return this->activation; }
@@ -63,4 +72,11 @@ MatrixXd Layer::getWeights() {
   for (int i = 0; i < this->units; i++)
     weights.row(i) = this->neurons[i].weights;
   return weights;
+}
+
+VectorXd Layer::getBias() {
+  VectorXd bias(this->units);
+  for (int i = 0; i < this->units; i++)
+    bias(i) = this->neurons[i].bias;
+  return bias;
 }

@@ -9,7 +9,7 @@ public:
   DenseLayer(int units, int inputSize = 0,
              const std::string activation = std::string(),
              const std::string initialization = std::string());
-  std::any getOutputImpl(const std::any &inputs) const override;
+  std::any getOutputImpl(const std::any &inputs) override;
 };
 
 #endif

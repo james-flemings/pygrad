@@ -19,15 +19,18 @@ public:
     return std::any_cast<T>(res);
   }
   void initializeWeights(Initializer &initializer);
+  VectorXd sigmoid(VectorXd &inputs);
+  VectorXd sigmoidPrime(VectorXd &activation);
   int totalParameters() const;
   int getUnits() const;
   MatrixXd getWeights();
+  VectorXd getBias();
   std::string getActivation() const;
   std::string getInitialization() const;
   int inputSize;
 
 protected:
-  virtual std::any getOutputImpl(const std::any &inputs) const = 0;
+  virtual std::any getOutputImpl(const std::any &inputs) = 0;
   int units;
   std::string activation, initialization;
   std::vector<Neuron> neurons;
