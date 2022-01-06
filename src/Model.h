@@ -39,12 +39,13 @@ public:
   void updateMiniBatch(const data &miniBatch, double lr,
                        double regularizer_term);
   back_prop_type backProp(const VectorXd &input, const VectorXd &label);
+  void forwardPass(std::vector<VectorXd> &activations, const VectorXd &input);
   double cost(const VectorXd &activations, const VectorXd &labels);
   VectorXd delta(const VectorXd sp, const VectorXd &activations,
                  const VectorXd &labels);
+  std::vector<std::unique_ptr<Layer>> layers;
 
 protected:
-  std::vector<std::unique_ptr<Layer>> layers;
   std::string loss, optimizer;
 };
 

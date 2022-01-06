@@ -45,20 +45,10 @@ back_prop_type Model::backProp(const VectorXd &input, const VectorXd &label) {
   int n = this->layers.size();
   std::vector<VectorXd> nabla_b(n);
   std::vector<MatrixXd> nabla_w(n);
-  std::vector<MatrixXd> weights(n);
 
-  // Forward pass
-  VectorXd activation = input;
-  VectorXd output;
-  activations.push_back(activation);
-  for (auto &layer : this->layers) {
-    output = layer->getOutput(activation);
-    activations.push_back(output);
-    activation = output;
-  }
+  forwardPass(activations, input);
 
   // backward pass
-  int size = activations.size();
   VectorXd del =
       this->delta(this->layers.back()->sigmoidPrime(activations.back()),
                   activations.back(), label);
@@ -76,6 +66,19 @@ back_prop_type Model::backProp(const VectorXd &input, const VectorXd &label) {
   return std::make_tuple(nabla_b, nabla_w);
 }
 
+void Model::forwardPass(std::vector<VectorXd> &activations,
+                        const VectorXd &input) {
+  // Forward pass
+  VectorXd activation = input;
+  VectorXd output;
+  activations.push_back(activation);
+  for (auto &layer : this->layers) {
+    output = layer->getOutput(activation);
+    activations.push_back(output);
+    activation = output;
+  }
+}
+
 double Model::cost(const VectorXd &activations, const VectorXd &labels) {
   /*
   Quadratic cost function
@@ -88,5 +91,5 @@ VectorXd Model::delta(const VectorXd sp, const VectorXd &activations,
   /*
   Gradient of cost function with respect to previous activations.
   */
-  return (activations - labels).cwiseProduct(sp);
+  return (activations - labels).array() * sp.array();
 }

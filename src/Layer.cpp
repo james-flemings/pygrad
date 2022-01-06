@@ -74,6 +74,12 @@ MatrixXd Layer::getWeights() {
   return weights;
 }
 
+void Layer::setWeights(MatrixXd &newWeights) {
+  for (auto &n : this->neurons) {
+    n.weights = newWeights;
+  }
+}
+
 VectorXd Layer::getBias() {
   VectorXd bias(this->units);
   for (int i = 0; i < this->units; i++)

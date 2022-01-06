@@ -24,6 +24,7 @@ public:
   int totalParameters() const;
   int getUnits() const;
   MatrixXd getWeights();
+  void setWeights(MatrixXd &newWeights);
   VectorXd getBias();
   std::string getActivation() const;
   std::string getInitialization() const;
