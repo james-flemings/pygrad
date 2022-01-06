@@ -40,5 +40,39 @@ void Model::summary() {
   std::cout << "Total Prameters: " << this->totalParameters() << "\n\n";
 }
 
-// back_prop_type Model::backProp(const VectorXd &input, const VectorXd &label)
-// {}
+back_prop_type Model::backProp(const VectorXd &input, const VectorXd &label) {
+  std::vector<VectorXd> activations;
+  int n = this->layers.size();
+  std::vector<VectorXd> nabla_b(n);
+  std::vector<MatrixXd> nabla_w(n);
+
+  // Forward pass
+  VectorXd activation = input;
+  VectorXd output;
+  activations.push_back(activation);
+  for (auto &layer : this->layers) {
+    output = layer->getOutput(activation);
+    activations.push_back(output);
+    activation = output;
+  }
+
+  // backward pass
+  VectorXd del = this->delta(this->sigmoid_prime(activations.back()),
+                             activations.back(), label);
+  nabla_b.back() = del;
+  nabla_w.back() = del * (activations[activations.size() - 2]).transpose();
+}
+
+double Model::cost(const VectorXd &activations, const VectorXd &labels) {
+  return 0.5 * (activations - labels).squaredNorm();
+}
+
+VectorXd Model::delta(const VectorXd output, const VectorXd &activations,
+                      const VectorXd &labels) {
+  return (activations - labels).cwiseProduct(output);
+}
+
+VectorXd Model::sigmoid_prime(const VectorXd activation) {
+  auto n = activation.size();
+  return activation.cwiseProduct((VectorXd::Ones(n) - activation));
+}
