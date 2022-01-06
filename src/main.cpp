@@ -7,10 +7,11 @@ using namespace Eigen;
 
 int main() {
   VectorXd v{{-1.0, 2.0}};
-  MatrixXd m = v * v.transpose();
-  // VectorXd u = v * v.transpose();
+  MatrixXd m(2, 2);
 
-  std::cout << "Matrix:" << std::endl;
+  m.row(0) = v;
+  m.row(1) = v;
+
   std::cout << m << std::endl;
 
   /*

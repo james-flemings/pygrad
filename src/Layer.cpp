@@ -57,3 +57,10 @@ int Layer::getUnits() const { return this->units; }
 std::string Layer::getActivation() const { return this->activation; }
 
 std::string Layer::getInitialization() const { return this->initialization; }
+
+MatrixXd Layer::getWeights() {
+  MatrixXd weights(this->units, this->inputSize);
+  for (int i = 0; i < this->units; i++)
+    weights.row(i) = this->neurons[i].weights;
+  return weights;
+}

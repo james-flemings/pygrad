@@ -21,6 +21,7 @@ public:
   void initializeWeights(Initializer &initializer);
   int totalParameters() const;
   int getUnits() const;
+  MatrixXd getWeights();
   std::string getActivation() const;
   std::string getInitialization() const;
   int inputSize;
