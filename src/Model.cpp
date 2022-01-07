@@ -81,8 +81,8 @@ void Model::updateMiniBatch(const data &miniBatch, double lr, double reg_term,
   MatrixXd weights;
 
   for (int i = 0; i < size; i++) {
-    nabla_b[i].resize(this->layers[i]->getUnits());
-    nabla_w[i].resize(this->layers[i]->getUnits(), this->layers[i]->inputSize);
+    nabla_b[i].setZero(this->layers[i]->getUnits());
+    nabla_w[i].setZero(this->layers[i]->getUnits(), this->layers[i]->inputSize);
   }
 
   for (auto &mb : miniBatch) {
