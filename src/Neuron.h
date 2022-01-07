@@ -1,6 +1,7 @@
 #ifndef NEURON_H
 #define NEURON_H
 
+#include "../eigen/Eigen/Eigen"
 #include <cmath>
 #include <functional>
 #include <iostream>
@@ -10,12 +11,14 @@
 #include <string>
 #include <vector>
 
+using namespace Eigen;
 class Neuron {
 public:
   Neuron(int size, const std::string &activation,
-         std::function<void(std::vector<double> &)> initializer);
-  double getOutput(std::vector<double> inputs);
-  std::vector<double> weights;
+         std::function<void(VectorXd &, double &)> initializer);
+  double getOutput(const VectorXd &inputs) const;
+  VectorXd weights;
+  double bias;
 
 protected:
   int size;

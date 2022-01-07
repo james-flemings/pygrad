@@ -14,19 +14,25 @@ public:
   Layer(int units, int inputSize = 0,
         const std::string activation = std::string(),
         const std::string initialization = std::string());
-  template <typename T> T getOutput(T inputs) {
+  template <typename T> T getOutput(const T &inputs) {
     std::any res = getOutputImpl(inputs);
     return std::any_cast<T>(res);
   }
   void initializeWeights(Initializer &initializer);
-  int totalParameters();
-  int getUnits();
+  VectorXd sigmoid(VectorXd &inputs);
+  VectorXd sigmoidPrime(VectorXd &activation);
+  int totalParameters() const;
+  int getUnits() const;
+  MatrixXd getWeights();
+  void setWeights(MatrixXd &newWeights);
+  VectorXd getBias();
+  void setBias(VectorXd &newBias);
+  std::string getActivation() const;
+  std::string getInitialization() const;
   int inputSize;
-  std::string getActivation();
-  std::string getInitialization();
 
 protected:
-  virtual std::any getOutputImpl(std::any inputs) = 0;
+  virtual std::any getOutputImpl(const std::any &inputs) = 0;
   int units;
   std::string activation, initialization;
   std::vector<Neuron> neurons;

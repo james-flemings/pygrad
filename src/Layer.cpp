@@ -37,23 +37,56 @@ void Layer::initializeWeights(Initializer &initializer) {
   auto fn = [&] {
     if (!this->initialization.compare("Random"))
       return std::bind(&Initializer::randomNormal, initializer,
-                       std::placeholders::_1);
+                       std::placeholders::_1, std::placeholders::_2);
   }();
 
   for (int i = 0; i < this->units; i++)
     this->neurons.push_back(Neuron(this->inputSize, this->activation, fn));
 }
 
-int Layer::totalParameters() {
+int Layer::totalParameters() const {
   int total = 0;
   for (auto &n : this->neurons) {
-    total += n.weights.size();
+    total += (n.weights.size() + 1);
   }
   return total;
 }
 
-int Layer::getUnits() { return this->units; }
+VectorXd Layer::sigmoid(VectorXd &inputs) {
+  return 1 / (1 + (-1 * inputs.array()).exp());
+}
 
-std::string Layer::getActivation() { return this->activation; }
+VectorXd Layer::sigmoidPrime(VectorXd &activation) {
+  auto n = activation.size();
+  return activation.array() * (1 - activation.array());
+}
 
-std::string Layer::getInitialization() { return this->initialization; }
+int Layer::getUnits() const { return this->units; }
+
+std::string Layer::getActivation() const { return this->activation; }
+
+std::string Layer::getInitialization() const { return this->initialization; }
+
+MatrixXd Layer::getWeights() {
+  MatrixXd weights(this->units, this->inputSize);
+  for (int i = 0; i < this->units; i++)
+    weights.row(i) = this->neurons[i].weights;
+  return weights;
+}
+
+void Layer::setWeights(MatrixXd &newWeights) {
+  for (int i = 0; i < this->neurons.size(); i++)
+    this->neurons[i].weights = newWeights.row(i);
+}
+
+VectorXd Layer::getBias() {
+  VectorXd bias(this->units);
+  for (int i = 0; i < this->units; i++)
+    bias(i) = this->neurons[i].bias;
+  return bias;
+}
+
+void Layer::setBias(VectorXd &bias) {
+  for (int i = 0; i < this->neurons.size(); i++)
+    this->neurons[i].bias = bias(i);
+}

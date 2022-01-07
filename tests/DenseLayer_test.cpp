@@ -25,8 +25,8 @@ TEST_F(DenseLayerTest, ParametersAssertions) {
 }
 
 TEST_F(DenseLayerTest, OutputShapeAssertions) {
-  std::vector<double> input = {1.0, 2.0, 2.0, 3.0};
-  std::vector<double> output = layer_->getOutput(input);
+  VectorXd input{{1.0, 2.0, 2.0, 3.0}};
+  VectorXd output = layer_->getOutput(input);
   EXPECT_EQ(output.size(), UNITS)
       << "Layer output shape does not match number of units";
   for (auto &o : output) {
