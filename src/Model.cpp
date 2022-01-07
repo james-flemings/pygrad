@@ -139,3 +139,31 @@ VectorXd Model::delta(const VectorXd sp, const VectorXd &activations,
   */
   return (activations - labels).array() * sp.array();
 }
+
+double Model::totalCost(const data &dt, double reg_term) {
+  std::vector<VectorXd> activations, input, label;
+  double cost = 0;
+  for (auto &d : dt) {
+    auto [input, label] = d;
+    this->forwardPass(activations, input);
+    cost += this->cost(*activations.end(), label);
+  }
+  // regularizer
+  if (reg_term) {
+    for (auto &layer : this->layers)
+      cost += 0.5 * (reg_term / dt.size()) * layer->getWeights().squaredNorm();
+  }
+  return cost;
+}
+
+double Model::totalAccuracy(const data &dt, double reg_term) {
+  std::vector<VectorXd> activations, input, label;
+  std::vector<std::tuple<double, double>> results;
+  double accuracy = 0;
+  for (auto &d : dt) {
+    auto [input, label] = d;
+    this->forwardPass(activations, input);
+    accuracy += (*activations.end()).maxCoeff() == label.maxCoeff();
+  }
+  return (accuracy / dt.size());
+}
