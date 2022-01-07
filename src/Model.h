@@ -44,10 +44,11 @@ public:
   VectorXd delta(const VectorXd sp, const VectorXd &activations,
                  const VectorXd &labels);
   std::vector<std::unique_ptr<Layer>> layers;
+  double totalCost(const data &d, double reg_term);
+  double totalAccuracy(const data &d, double reg_term);
 
 protected:
   std::string loss, optimizer;
-  double lr, reg_term;
   int batchSize;
 };
 

@@ -40,8 +40,24 @@ void Model::summary() {
   std::cout << "Total Prameters: " << this->totalParameters() << "\n\n";
 }
 
-void Model::updateMiniBatch(const data &miniBatch, double lr,
-                            double regularizer_term, int n) {
+results Model::train(const data &training_data, const int epochs, int batchSize,
+                     double lr, double reg_term, const data &validation_data) {
+  int n = training_data.size();
+  std::vector<double> eval_cost, eval_accuracy, train_cost, train_accurracy;
+  std::vector<data> miniBatches;
+  for (int i = 0; i < epochs; i++) {
+    std::random_shuffle(training_data.begin(), training_data.end());
+    for (int j = 0; j < n; i += batchSize) {
+      this->updateMiniBatch(
+          data(&training_data[j], &training_data[j + batchSize]), lr, reg_term,
+          n);
+    }
+    std::cout << "Epoch " << i << " training complete\n";
+  }
+}
+
+void Model::updateMiniBatch(const data &miniBatch, double lr, double reg_term,
+                            int n) {
   int size = this->layers.size();
   std::vector<VectorXd> nabla_b(size), delta_nabla_b;
   std::vector<MatrixXd> nabla_w(size), delta_nabla_w;
@@ -62,11 +78,10 @@ void Model::updateMiniBatch(const data &miniBatch, double lr,
     }
   }
   for (int i = 0; i < size; i++) {
-    weights = (1 - this->lr * this->reg_term / n) *
-                  this->layers[i]->getWeights().array() -
-              (this->lr / this->batchSize) * nabla_w[i].array();
+    weights = (1 - lr * reg_term / n) * this->layers[i]->getWeights().array() -
+              (lr / miniBatch.size()) * nabla_w[i].array();
     bias = this->layers[i]->getBias().array() -
-           (this->lr / this->batchSize) * nabla_b[i].array();
+           (lr / miniBatch.size()) * nabla_b[i].array();
     this->layers[i]->setWeights(weights);
     this->layers[i]->setBias(bias);
   }
