@@ -49,18 +49,24 @@ results Model::train(data &training_data, const int epochs, int batchSize,
 
   for (int i = 0; i < epochs; i++) {
     std::shuffle(training_data.begin(), training_data.end(), rng);
-    for (int j = 0; j < n; i += batchSize) {
+    for (int j = 0; j < n; j += batchSize) {
       this->updateMiniBatch(
-          data(&training_data[j], &training_data[j + batchSize]), lr, reg_term,
-          n);
+          data(&training_data[j], &training_data[j + batchSize - 1]), lr,
+          reg_term, n);
     }
     std::cout << "Epoch " << i << " training complete\n";
+
     train_accuracy.push_back(this->totalAccuracy(training_data, reg_term));
     train_cost.push_back(this->totalCost(training_data, reg_term));
+    std::cout << "Train cost function: " << train_cost[i]
+              << "\t Train accuracy: " << train_accuracy[i] << std::endl;
+
     if (validation_data.size()) {
       valid_accuracy.push_back(this->totalAccuracy(validation_data, reg_term));
       valid_cost.push_back(this->totalCost(validation_data, reg_term));
     }
+    std::cout << "Valid cost function: " << valid_cost[i]
+              << "\t Valid accuracy: " << valid_accuracy[i] << std::endl;
   }
   return std::make_tuple(train_cost, train_accuracy, valid_cost,
                          valid_accuracy);
