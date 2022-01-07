@@ -40,20 +40,30 @@ void Model::summary() {
   std::cout << "Total Prameters: " << this->totalParameters() << "\n\n";
 }
 
-results Model::train(const data &training_data, const int epochs, int batchSize,
+results Model::train(data &training_data, const int epochs, int batchSize,
                      double lr, double reg_term, const data &validation_data) {
   int n = training_data.size();
-  std::vector<double> eval_cost, eval_accuracy, train_cost, train_accurracy;
-  std::vector<data> miniBatches;
+  std::vector<double> valid_cost, valid_accuracy, train_cost, train_accuracy;
+  auto rd = std::random_device{};
+  auto rng = std::default_random_engine{rd()};
+
   for (int i = 0; i < epochs; i++) {
-    std::random_shuffle(training_data.begin(), training_data.end());
+    std::shuffle(training_data.begin(), training_data.end(), rng);
     for (int j = 0; j < n; i += batchSize) {
       this->updateMiniBatch(
           data(&training_data[j], &training_data[j + batchSize]), lr, reg_term,
           n);
     }
     std::cout << "Epoch " << i << " training complete\n";
+    train_accuracy.push_back(this->totalAccuracy(training_data, reg_term));
+    train_cost.push_back(this->totalCost(training_data, reg_term));
+    if (validation_data.size()) {
+      valid_accuracy.push_back(this->totalAccuracy(validation_data, reg_term));
+      valid_cost.push_back(this->totalCost(validation_data, reg_term));
+    }
   }
+  return std::make_tuple(train_cost, train_accuracy, valid_cost,
+                         valid_accuracy);
 }
 
 void Model::updateMiniBatch(const data &miniBatch, double lr, double reg_term,

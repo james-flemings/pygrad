@@ -32,9 +32,8 @@ public:
   Model(std::vector<std::unique_ptr<Layer>> &layers);
   int totalParameters();
   void summary();
-  results train(const data &training_data, const int epochs = 20,
-                int batchSize = 32, double lr = 0.1,
-                double regularizer_term = 0,
+  results train(data &training_data, const int epochs = 20, int batchSize = 32,
+                double lr = 0.1, double regularizer_term = 0,
                 const data &validation_data = data());
   void updateMiniBatch(const data &miniBatch, double lr,
                        double regularizer_term, int n);

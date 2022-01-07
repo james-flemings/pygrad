@@ -1,12 +1,13 @@
 #include "../eigen/Eigen/Eigen"
-//#include "Model.h"
+#include "Model.h"
+#include <algorithm>
 #include <any>
 #include <iostream>
+#include <random>
 
 using namespace Eigen;
 
 int main() {
-  /*
   std::vector<std::unique_ptr<Layer>> layers;
   layers.push_back(std::make_unique<DenseLayer>(5, 3, "Sigmoid"));
   layers.push_back(std::make_unique<DenseLayer>(2, 0, "Sigmoid"));
@@ -22,14 +23,6 @@ int main() {
     std::cout << a << std::endl;
   }
   std::cout << activations.size() << std::endl;
-  */
-  VectorXd v;
-  v.resize(5);
-  std::cout << v << std::endl;
-
-  MatrixXd m;
-  m.resize(2, 3);
-  std::cout << m << std::endl;
 
   return 0;
 }
