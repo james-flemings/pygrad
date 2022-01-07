@@ -26,6 +26,7 @@ public:
   MatrixXd getWeights();
   void setWeights(MatrixXd &newWeights);
   VectorXd getBias();
+  void setBias(VectorXd &newBias);
   std::string getActivation() const;
   std::string getInitialization() const;
   int inputSize;

@@ -40,10 +40,41 @@ void Model::summary() {
   std::cout << "Total Prameters: " << this->totalParameters() << "\n\n";
 }
 
+void Model::updateMiniBatch(const data &miniBatch, double lr,
+                            double regularizer_term, int n) {
+  int size = this->layers.size();
+  std::vector<VectorXd> nabla_b(size), delta_nabla_b;
+  std::vector<MatrixXd> nabla_w(size), delta_nabla_w;
+  VectorXd input, labels, bias;
+  MatrixXd weights;
+
+  for (int i = 0; i < size; i++) {
+    nabla_b[i].resize(this->layers[i]->getUnits());
+    nabla_w[i].resize(this->layers[i]->getUnits(), this->layers[i]->inputSize);
+  }
+
+  for (auto &mb : miniBatch) {
+    auto [input, labels] = mb;
+    auto [delta_nabla_b, delta_nabla_w] = backProp(input, labels);
+    for (int i = 0; i < size; i++) {
+      nabla_b[i] += delta_nabla_b[i];
+      nabla_w[i] += delta_nabla_w[i];
+    }
+  }
+  for (int i = 0; i < size; i++) {
+    weights = (1 - this->lr * this->reg_term / n) *
+                  this->layers[i]->getWeights().array() -
+              (this->lr / this->batchSize) * nabla_w[i].array();
+    bias = this->layers[i]->getBias().array() -
+           (this->lr / this->batchSize) * nabla_b[i].array();
+    this->layers[i]->setWeights(weights);
+    this->layers[i]->setBias(bias);
+  }
+}
+
 back_prop_type Model::backProp(const VectorXd &input, const VectorXd &label) {
-  std::vector<VectorXd> activations;
   int n = this->layers.size();
-  std::vector<VectorXd> nabla_b(n);
+  std::vector<VectorXd> nabla_b(n), activations;
   std::vector<MatrixXd> nabla_w(n);
 
   forwardPass(activations, input);
@@ -56,7 +87,7 @@ back_prop_type Model::backProp(const VectorXd &input, const VectorXd &label) {
   nabla_w.back() = del * (activations[n - 2]).transpose();
 
   VectorXd sp;
-  for (int i = n - 2; i > 0; i++) {
+  for (int i = n - 2; i > 0; i--) {
     sp = this->layers[i]->sigmoidPrime(activations[i]);
     del = (this->layers[i + 1]->getWeights().transpose() * del).array() *
           sp.array();

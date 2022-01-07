@@ -33,11 +33,11 @@ public:
   int totalParameters();
   void summary();
   results train(const data &training_data, const int epochs = 20,
-                int batchSize = 32, double lr = 0.001,
+                int batchSize = 32, double lr = 0.1,
                 double regularizer_term = 0,
                 const data &validation_data = data());
   void updateMiniBatch(const data &miniBatch, double lr,
-                       double regularizer_term);
+                       double regularizer_term, int n);
   back_prop_type backProp(const VectorXd &input, const VectorXd &label);
   void forwardPass(std::vector<VectorXd> &activations, const VectorXd &input);
   double cost(const VectorXd &activations, const VectorXd &labels);
@@ -47,6 +47,8 @@ public:
 
 protected:
   std::string loss, optimizer;
+  double lr, reg_term;
+  int batchSize;
 };
 
 #endif
