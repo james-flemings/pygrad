@@ -45,10 +45,10 @@ results Model::train(data &training_data, const int epochs, int batchSize,
   int n = training_data.size();
   int b;
   std::vector<double> valid_cost, valid_accuracy, train_cost, train_accuracy;
-  auto rd = std::random_device{};
-  auto rng = std::default_random_engine{rd()};
 
   for (int i = 0; i < epochs; i++) {
+    auto rd = std::random_device{};
+    auto rng = std::default_random_engine{rd()};
     std::shuffle(training_data.begin(), training_data.end(), rng);
     for (int j = 0; j < n; j += batchSize) {
       b = (j + batchSize - 1) < n ? batchSize : n - j;
@@ -114,15 +114,14 @@ back_prop_type Model::backProp(const VectorXd &input, const VectorXd &label) {
   forwardPass(activations, input);
 
   // backward pass
-  VectorXd del =
-      this->delta(this->layers.back()->sigmoidPrime(activations.back()),
-                  activations.back(), label);
-  nabla_b.back() = del;
-  nabla_w.back() = del * (activations[n - 1]).transpose();
+  VectorXd del = this->delta(this->layers[n - 1]->sigmoidPrime(activations[n]),
+                             activations[n], label);
+  nabla_b[n - 1] = del;
+  nabla_w[n - 1] = del * (activations[n - 1]).transpose();
 
   VectorXd sp;
   for (int i = n - 2; i >= 0; i--) {
-    sp = this->layers[i]->sigmoidPrime(activations[i]);
+    sp = this->layers[i]->sigmoidPrime(activations[i + 1]);
     del = (this->layers[i + 1]->getWeights().transpose() * del).array() *
           sp.array();
     nabla_b[i] = del;
@@ -135,12 +134,10 @@ void Model::forwardPass(std::vector<VectorXd> &activations,
                         const VectorXd &input) {
   // Forward pass
   VectorXd activation = input;
-  VectorXd output;
   activations.push_back(activation);
   for (auto &layer : this->layers) {
-    output = layer->getOutput(activation);
-    activations.push_back(output);
-    activation = output;
+    activation = layer->getOutput(activation);
+    activations.push_back(activation);
   }
 }
 
@@ -166,18 +163,20 @@ double Model::totalCost(const data &dt, double reg_term) {
     auto [input, label] = d;
     this->forwardPass(activations, input);
     cost += this->cost(activations[activations.size() - 1], label);
+    activations = std::vector<VectorXd>();
   }
   // regularizer
+  /*
   if (reg_term != 0.0) {
     for (auto &layer : this->layers)
       cost += 0.5 * (reg_term / dt.size()) * layer->getWeights().squaredNorm();
   }
+  */
   return cost;
 }
 
 double Model::totalAccuracy(const data &dt, double reg_term) {
   std::vector<VectorXd> activations, input, label;
-  std::vector<std::tuple<double, double>> results;
   double accuracy = 0;
   for (auto &d : dt) {
     auto [input, label] = d;
@@ -187,6 +186,7 @@ double Model::totalAccuracy(const data &dt, double reg_term) {
     activations[activations.size() - 1].maxCoeff(&p1);
     label.maxCoeff(&p2);
     accuracy += (p1 == p2);
+    activations = std::vector<VectorXd>();
   }
   return (accuracy / dt.size());
 }

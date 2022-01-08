@@ -21,15 +21,17 @@ int main() {
   data hold_data;
   VectorXd x, y;
   readIrisData("Iris.csv", hold_data);
-
-  model.train(hold_data, 5, 32, 3.0, 0);
-
   /*
-  VectorXd v{{1, 2, 3}};
-  int pos = -1;
-
-  std::cout << v.maxCoeff(&pos) << "Index: " << pos << std::endl;
+  for (int i = 0; i < 5; i++) {
+    auto [x, y] = hold_data[i];
+    std::cout << "X: " << std::endl;
+    std::cout << x << std::endl;
+    std::cout << "Y: " << std::endl;
+    std::cout << y << std::endl;
+  }
   */
+
+  model.train(hold_data, 5, 32, 1.0, 0);
 
   return 0;
 }
