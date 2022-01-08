@@ -31,7 +31,7 @@ int main() {
   }
   */
 
-  model.train(hold_data, 5, 32, 1.0, 0);
+  model.train(hold_data, 10, 32, 1.0, 0);
 
   return 0;
 }

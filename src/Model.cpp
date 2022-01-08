@@ -51,9 +51,9 @@ results Model::train(data &training_data, const int epochs, int batchSize,
     auto rng = std::default_random_engine{rd()};
     std::shuffle(training_data.begin(), training_data.end(), rng);
     for (int j = 0; j < n; j += batchSize) {
-      b = (j + batchSize - 1) < n ? batchSize : n - j;
-      this->updateMiniBatch(data(&training_data[j], &training_data[b + j - 1]),
-                            lr, reg_term, n);
+      b = (j + batchSize) < n ? batchSize : n - j;
+      this->updateMiniBatch(data(&training_data[j], &training_data[b + j]), lr,
+                            reg_term, n);
     }
     std::cout << "Epoch " << i + 1 << " training complete\n";
 
@@ -163,7 +163,7 @@ double Model::totalCost(const data &dt, double reg_term) {
     auto [input, label] = d;
     this->forwardPass(activations, input);
     cost += this->cost(activations[activations.size() - 1], label);
-    activations = std::vector<VectorXd>();
+    activations.resize(0);
   }
   // regularizer
   /*
@@ -186,7 +186,7 @@ double Model::totalAccuracy(const data &dt, double reg_term) {
     activations[activations.size() - 1].maxCoeff(&p1);
     label.maxCoeff(&p2);
     accuracy += (p1 == p2);
-    activations = std::vector<VectorXd>();
+    activations.resize(0);
   }
   return (accuracy / dt.size());
 }
