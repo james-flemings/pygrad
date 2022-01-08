@@ -8,6 +8,8 @@
 
 using namespace Eigen;
 
+// typedef std::vector<std::tuple<VectorXd, VectorXd>> data;
+
 void readIrisData(const std::string &f_name, data &hold_data);
 
 int main() {
@@ -16,21 +18,18 @@ int main() {
   Model model(layers);
   model.summary();
 
-  VectorXd input{{1.0, 1.0, 1.0}};
-  std::vector<VectorXd> activations;
-  model.forwardPass(activations, input);
-  int i = 0;
-  for (auto &a : activations) {
-    std::cout << "Output " << i << std::endl;
-    std::cout << a << std::endl;
-  }
-  std::cout << activations.size() << std::endl;
-
   data hold_data;
   VectorXd x, y;
   readIrisData("Iris.csv", hold_data);
 
-  model.train(hold_data, 5, 32, 0.1, 0);
+  model.train(hold_data, 5, 32, 3.0, 0);
+
+  /*
+  VectorXd v{{1, 2, 3}};
+  int pos = -1;
+
+  std::cout << v.maxCoeff(&pos) << "Index: " << pos << std::endl;
+  */
 
   return 0;
 }
