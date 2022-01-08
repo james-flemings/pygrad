@@ -36,4 +36,4 @@ examples/iris-example
 build
 
 # Downloaded Datasets
-examples/datasets
+examples/datasets/*
