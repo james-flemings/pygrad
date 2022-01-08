@@ -43,23 +43,31 @@ void Model::summary() {
 results Model::train(data &training_data, const int epochs, int batchSize,
                      double lr, double reg_term, const data &validation_data) {
   int n = training_data.size();
+  int b;
   std::vector<double> valid_cost, valid_accuracy, train_cost, train_accuracy;
-  auto rd = std::random_device{};
-  auto rng = std::default_random_engine{rd()};
 
   for (int i = 0; i < epochs; i++) {
+    auto rd = std::random_device{};
+    auto rng = std::default_random_engine{rd()};
     std::shuffle(training_data.begin(), training_data.end(), rng);
-    for (int j = 0; j < n; i += batchSize) {
-      this->updateMiniBatch(
-          data(&training_data[j], &training_data[j + batchSize]), lr, reg_term,
-          n);
+    for (int j = 0; j < n; j += batchSize) {
+      b = (j + batchSize) < n ? batchSize : n - j;
+      this->updateMiniBatch(data(&training_data[j], &training_data[b + j]), lr,
+                            reg_term, n);
     }
-    std::cout << "Epoch " << i << " training complete\n";
+    std::cout << "Epoch " << i + 1 << " training complete\n";
+
     train_accuracy.push_back(this->totalAccuracy(training_data, reg_term));
     train_cost.push_back(this->totalCost(training_data, reg_term));
+
+    std::cout << "Train cost function: " << train_cost[i]
+              << "\t Train accuracy: " << train_accuracy[i] << std::endl;
+
     if (validation_data.size()) {
       valid_accuracy.push_back(this->totalAccuracy(validation_data, reg_term));
       valid_cost.push_back(this->totalCost(validation_data, reg_term));
+      std::cout << "Valid cost function: " << valid_cost[i]
+                << "\t Valid accuracy: " << valid_accuracy[i] << std::endl;
     }
   }
   return std::make_tuple(train_cost, train_accuracy, valid_cost,
@@ -75,8 +83,8 @@ void Model::updateMiniBatch(const data &miniBatch, double lr, double reg_term,
   MatrixXd weights;
 
   for (int i = 0; i < size; i++) {
-    nabla_b[i].resize(this->layers[i]->getUnits());
-    nabla_w[i].resize(this->layers[i]->getUnits(), this->layers[i]->inputSize);
+    nabla_b[i].setZero(this->layers[i]->getUnits());
+    nabla_w[i].setZero(this->layers[i]->getUnits(), this->layers[i]->inputSize);
   }
 
   for (auto &mb : miniBatch) {
@@ -87,6 +95,7 @@ void Model::updateMiniBatch(const data &miniBatch, double lr, double reg_term,
       nabla_w[i] += delta_nabla_w[i];
     }
   }
+
   for (int i = 0; i < size; i++) {
     weights = (1 - lr * reg_term / n) * this->layers[i]->getWeights().array() -
               (lr / miniBatch.size()) * nabla_w[i].array();
@@ -105,19 +114,18 @@ back_prop_type Model::backProp(const VectorXd &input, const VectorXd &label) {
   forwardPass(activations, input);
 
   // backward pass
-  VectorXd del =
-      this->delta(this->layers.back()->sigmoidPrime(activations.back()),
-                  activations.back(), label);
-  nabla_b.back() = del;
-  nabla_w.back() = del * (activations[n - 2]).transpose();
+  VectorXd del = this->delta(this->layers[n - 1]->sigmoidPrime(activations[n]),
+                             activations[n], label);
+  nabla_b[n - 1] = del;
+  nabla_w[n - 1] = del * (activations[n - 1]).transpose();
 
   VectorXd sp;
-  for (int i = n - 2; i > 0; i--) {
-    sp = this->layers[i]->sigmoidPrime(activations[i]);
+  for (int i = n - 2; i >= 0; i--) {
+    sp = this->layers[i]->sigmoidPrime(activations[i + 1]);
     del = (this->layers[i + 1]->getWeights().transpose() * del).array() *
           sp.array();
     nabla_b[i] = del;
-    nabla_w[i] = del * activations[i - 1].transpose();
+    nabla_w[i] = del * activations[i].transpose();
   }
   return std::make_tuple(nabla_b, nabla_w);
 }
@@ -126,12 +134,10 @@ void Model::forwardPass(std::vector<VectorXd> &activations,
                         const VectorXd &input) {
   // Forward pass
   VectorXd activation = input;
-  VectorXd output;
   activations.push_back(activation);
   for (auto &layer : this->layers) {
-    output = layer->getOutput(activation);
-    activations.push_back(output);
-    activation = output;
+    activation = layer->getOutput(activation);
+    activations.push_back(activation);
   }
 }
 
@@ -156,24 +162,31 @@ double Model::totalCost(const data &dt, double reg_term) {
   for (auto &d : dt) {
     auto [input, label] = d;
     this->forwardPass(activations, input);
-    cost += this->cost(*activations.end(), label);
+    cost += this->cost(activations[activations.size() - 1], label);
+    activations.resize(0);
   }
   // regularizer
-  if (reg_term) {
+  /*
+  if (reg_term != 0.0) {
     for (auto &layer : this->layers)
       cost += 0.5 * (reg_term / dt.size()) * layer->getWeights().squaredNorm();
   }
+  */
   return cost;
 }
 
 double Model::totalAccuracy(const data &dt, double reg_term) {
   std::vector<VectorXd> activations, input, label;
-  std::vector<std::tuple<double, double>> results;
   double accuracy = 0;
   for (auto &d : dt) {
     auto [input, label] = d;
     this->forwardPass(activations, input);
-    accuracy += (*activations.end()).maxCoeff() == label.maxCoeff();
+    int p1 = -1;
+    int p2 = -1;
+    activations[activations.size() - 1].maxCoeff(&p1);
+    label.maxCoeff(&p2);
+    accuracy += (p1 == p2);
+    activations.resize(0);
   }
   return (accuracy / dt.size());
 }
