@@ -14,7 +14,8 @@ void readIrisData(const std::string &f_name, data &hold_data);
 
 int main() {
   std::vector<std::unique_ptr<Layer>> layers;
-  layers.push_back(std::make_unique<DenseLayer>(3, 4, "Sigmoid"));
+  layers.push_back(std::make_unique<DenseLayer>(5, 4, "Sigmoid"));
+  layers.push_back(std::make_unique<DenseLayer>(3, 0, "Sigmoid"));
   Model model(layers);
   model.summary();
 
@@ -26,12 +27,10 @@ int main() {
     auto [x, y] = hold_data[i];
     std::cout << "X: " << std::endl;
     std::cout << x << std::endl;
-    std::cout << "Y: " << std::endl;
-    std::cout << y << std::endl;
   }
   */
 
-  model.train(hold_data, 10, 32, 1.0, 0);
+  model.train(hold_data, 20, 32, 2.0, 0);
 
   return 0;
 }
@@ -40,7 +39,9 @@ void readIrisData(const std::string &f_name, data &hold_data) {
   std::ifstream i_file;
   std::string cell;
   i_file.open(f_name);
-  std::vector<double> x;
+  std::vector<double> x, y;
+  double max[4] = {0.0, 0.0, 0.0, 0.0};
+  double min[4] = {100.0, 100.0, 100.0, 100.0};
 
   std::map<std::string, int> vectorize;
   vectorize.insert(std::pair<std::string, int>("Iris-setosa", 0));
@@ -56,6 +57,12 @@ void readIrisData(const std::string &f_name, data &hold_data) {
       continue;
     } else {
       x.push_back(std::stod(cell));
+      if (std::stod(cell) > max[i - 1]) {
+        max[i - 1] = std::stod(cell);
+      }
+      if (std::stod(cell) < min[i - 1]) {
+        min[i - 1] = std::stod(cell);
+      }
       i += 1;
     }
     if (i == 5) {
@@ -67,6 +74,12 @@ void readIrisData(const std::string &f_name, data &hold_data) {
           std::make_tuple(Map<VectorXd>(x.data(), x.size()), label));
       x = std::vector<double>();
       i = 0;
+    }
+  }
+  for (auto &data : hold_data) {
+    auto [x, y] = data;
+    for (int i = 0; i < 4; i++) {
+      std::get<0>(data)[i] = (x(i) - min[i]) / (max[i] - min[i]);
     }
   }
 }
