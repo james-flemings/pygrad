@@ -30,7 +30,10 @@ src.*.obj
 src/*.exe
 src/*.out
 src/*.app
-src/pygrad
+examples/iris-example
 
 # Build from test
 build
+
+# Downloaded Datasets
+examples/datasets

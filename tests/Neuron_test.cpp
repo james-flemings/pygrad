@@ -1,5 +1,5 @@
-#include "../src/Initializer.h"
-#include "../src/Neuron.h"
+#include "Initializer.h"
+#include "Neuron.h"
 #include <gtest/gtest.h>
 
 const int SIZE = 2;

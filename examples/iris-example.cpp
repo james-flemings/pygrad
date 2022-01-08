@@ -8,8 +8,6 @@
 
 using namespace Eigen;
 
-// typedef std::vector<std::tuple<VectorXd, VectorXd>> data;
-
 void readIrisData(const std::string &f_name, data &hold_data);
 
 int main() {
@@ -21,14 +19,7 @@ int main() {
 
   data hold_data;
   VectorXd x, y;
-  readIrisData("Iris.csv", hold_data);
-  /*
-  for (int i = 0; i < 5; i++) {
-    auto [x, y] = hold_data[i];
-    std::cout << "X: " << std::endl;
-    std::cout << x << std::endl;
-  }
-  */
+  readIrisData("datasets/Iris.csv", hold_data);
 
   model.train(hold_data, 20, 32, 2.0, 0);
 
@@ -36,6 +27,10 @@ int main() {
 }
 
 void readIrisData(const std::string &f_name, data &hold_data) {
+  /*
+  A very messy, hacky function to read in the iris dataset. I don't
+  recommend understanding how it works
+  */
   std::ifstream i_file;
   std::string cell;
   i_file.open(f_name);
@@ -49,9 +44,8 @@ void readIrisData(const std::string &f_name, data &hold_data) {
   vectorize.insert(std::pair<std::string, int>("Iris-virginica", 2));
 
   int i = 0;
-  std::getline(i_file, cell);
+  std::getline(i_file, cell); // Throw away header info
   while (std::getline(i_file, cell, ',')) {
-    // long, complicated if statement checking if cell is a digit
     if (i == 0) {
       i += 1;
       continue;
@@ -76,6 +70,7 @@ void readIrisData(const std::string &f_name, data &hold_data) {
       i = 0;
     }
   }
+  // Normalizing data
   for (auto &data : hold_data) {
     auto [x, y] = data;
     for (int i = 0; i < 4; i++) {

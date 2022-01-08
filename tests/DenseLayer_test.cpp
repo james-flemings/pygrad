@@ -1,5 +1,5 @@
-#include "../src/DenseLayer.h"
-#include "../src/Layer.h"
+#include "DenseLayer.h"
+#include "Layer.h"
 #include <gtest/gtest.h>
 
 const int UNITS = 3;
