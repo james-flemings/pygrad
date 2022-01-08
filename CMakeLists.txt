@@ -16,6 +16,8 @@ FetchContent_MakeAvailable(googletest)
 
 enable_testing()
 
+include_directories(include)
+
 add_executable(
   Neuron_test
   tests/Neuron_test.cpp

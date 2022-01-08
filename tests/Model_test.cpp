@@ -1,4 +1,4 @@
-#include "../src/Model.h"
+#include "Model.h"
 #include <gtest/gtest.h>
 
 const int UNITS = 3;
