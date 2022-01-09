@@ -30,7 +30,7 @@ src.*.obj
 src/*.exe
 src/*.out
 src/*.app
-examples/iris-example
+examples/*-example
 
 # Build from test
 build

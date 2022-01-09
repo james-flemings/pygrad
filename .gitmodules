@@ -2,3 +2,7 @@
 	path = eigen
 	url = https://gitlab.com/libeigen/eigen.git
 	branch = master
+[submodule "mnist"]
+	path = mnist
+	url = https://github.com/wichtounet/mnist.git
+	branch = master
